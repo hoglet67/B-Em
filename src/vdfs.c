@@ -33,6 +33,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <dirent.h>
 
 #include <search.h>
@@ -63,6 +64,15 @@ int vdfs_enabled = 0;
 #define ATTR_OTHR_LOCKD  0x0080
 #define ATTR_IS_DIR      0x4000
 #define ATTR_DELETED     0x8000
+
+#ifdef WIN32
+// stpcpy does not exist in Win32
+// TODO: Should this be moved to compat-wrappers?
+char *stpcpy(char *dest, const char *src) {
+  strcpy(dest, src);
+  return dest + strlen(dest);
+}
+#endif
 
 typedef struct _vdfs_entry vdfs_ent_t;
 
@@ -304,12 +314,14 @@ static void scan_entry(vdfs_ent_t *ent) {
             ent->attribs |= ATTR_USER_WRITE;
         if (stb.st_mode & S_IXUSR)
             ent->attribs |= ATTR_USER_EXEC;
+#ifndef WIN32
         if (stb.st_mode & (S_IRGRP|S_IROTH))
             ent->attribs |= ATTR_OTHR_READ;
         if (stb.st_mode & (S_IWGRP|S_IWOTH))
             ent->attribs |= ATTR_OTHR_WRITE;
         if (stb.st_mode & (S_IXGRP|S_IXOTH))
             ent->attribs |= ATTR_OTHR_EXEC;
+#endif
     }
     free(host_file_path);
     bem_debugf("vdfs: scan_entry: acorn=%s, host=%s, attr=%04X, load=%08X, exec=%08X\n", ent->acorn_fn, ent->host_fn, ent->attribs, ent->load_addr, ent->exec_addr);
