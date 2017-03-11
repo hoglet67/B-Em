@@ -29,7 +29,6 @@ b_em_SOURCES = \
 	NS32016/Profile.c \
 	NS32016/Trap.c \
 	NS32016/mem32016.c \
-	Z80.c \
 	acia.c \
 	adc.c \
 	adf.c \
@@ -76,6 +75,7 @@ b_em_SOURCES = \
 	video.c \
 	wd1770.c \
 	x86.c \
+	z80.c \
 	resid-fp/convolve-sse.cc \
 	resid-fp/convolve.cc \
 	resid-fp/envelope.cc \

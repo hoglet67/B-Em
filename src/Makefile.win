@@ -93,7 +93,7 @@ LIBS =  -mwindows -lalleg -lz -lalut -lopenal32 -lgdi32 -lwinmm -lstdc++
 all : b-em.exe
 
 b-em.exe: $(OBJ) $(SIDOBJ) $(NS32KOBJ)
-	$(CC) $(OBJ) $(SIDOBJ) $(NS32KOBJ) -o "b-em.exe" $(LIBS)
+	$(CC) $(OBJ) $(SIDOBJ) $(NS32KOBJ) -static -o "b-em.exe" $(LIBS)
 
 clean :
 	del *.o *.exe *.res
